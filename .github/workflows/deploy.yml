@@ -23,6 +23,8 @@ jobs:
           echo "BACKEND_HOST=${{ vars.BACKEND_HOST }}" >> .env
           echo "FRONTEND_PORT=${{ vars.FRONTEND_PORT }}" >> .env
 
+      - name: Show .env file for debugging
+        run: cat .env
+
       - name: Build and start containers
-        run: |
-          docker compose --env-file .env up -d --build
+        run: docker compose --env-file .env up -d --build
