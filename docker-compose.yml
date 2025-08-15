@@ -6,10 +6,10 @@ services:
     container_name: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
     ports:
       - "3306:3306"
     volumes:
@@ -28,9 +28,9 @@ services:
     restart: always
     environment:
       DB_HOST: mysql
-      DB_USER: ${MYSQL_USER}
-      DB_PASSWORD: ${MYSQL_PASSWORD}
-      DB_NAME: ${MYSQL_DATABASE}
+      DB_USER: "${MYSQL_USER}"
+      DB_PASSWORD: "${MYSQL_PASSWORD}"
+      DB_NAME: "${MYSQL_DATABASE}"
       DB_PORT: 3306
       BACKEND_PORT: 5000
     ports:
@@ -39,21 +39,21 @@ services:
       mysql:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"] # Ensure your backend has /health endpoint
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
       interval: 10s
       timeout: 5s
       retries: 5
+
   frontend:
     build: ./frontend
     container_name: frontend
     restart: always
     ports:
-      - "${FRONTEND_PORT}:80"
-    env_file:
-      - .env
+      - "3000:80"
+    environment:
+      BACKEND_HOST: "${BACKEND_HOST}"
     depends_on:
       - backend
-
 
 volumes:
   mysql_data:
