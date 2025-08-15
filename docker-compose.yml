@@ -1,53 +1,19 @@
 services:
   mysql:
-    image: mysql:8
-    container_name: mysql
-    restart: always
-    ports:
-      - "3306:3306"
+    image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    volumes:
-      - mysql_data:/var/lib/mysql
 
   backend:
-    build:
-      context: ./backend
-    container_name: backend
-    restart: always
-    ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    build: ./backend
     environment:
       BACKEND_PORT: ${BACKEND_PORT}
       BACKEND_HOST: ${BACKEND_HOST}
-      MYSQL_HOST: mysql
-      MYSQL_PORT: 3306
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    depends_on:
-      mysql:
-        condition: service_healthy
 
   frontend:
-    build:
-      context: ./frontend
-    container_name: frontend
-    restart: always
-    ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    build: ./frontend
     environment:
       FRONTEND_PORT: ${FRONTEND_PORT}
-    depends_on:
-      - backend
-
-volumes:
-  mysql_data:
