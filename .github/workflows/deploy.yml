@@ -1,4 +1,4 @@
-name: CI/CD with Docker Compose
+name: Docker Compose Deployment
 
 on:
   push:
@@ -18,12 +18,12 @@ jobs:
       FRONTEND_PORT: ${{ secrets.FRONTEND_PORT }}
 
     steps:
-      - name: Checkout Code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create .env file from GitHub Secrets
+      - name: Create .env file
         run: |
-          echo "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}" > .env
+          echo "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}" >> .env
           echo "MYSQL_USER=${MYSQL_USER}" >> .env
           echo "MYSQL_PASSWORD=${MYSQL_PASSWORD}" >> .env
           echo "MYSQL_DATABASE=${MYSQL_DATABASE}" >> .env
@@ -31,4 +31,7 @@ jobs:
           echo "BACKEND_HOST=${BACKEND_HOST}" >> .env
           echo "FRONTEND_PORT=${FRONTEND_PORT}" >> .env
 
-   
+      - name: Show .env values (debug only)
+        run: cat .env
+
+  
