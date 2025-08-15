@@ -1,17 +1,36 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: production
     env:
       MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-      MYSQL_DATABASE: ${{ vars.MYSQL_DATABASE }}
       MYSQL_USER: ${{ secrets.MYSQL_USER }}
       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      MYSQL_DATABASE: ${{ vars.MYSQL_DATABASE }}
+      BACKEND_PORT: ${{ vars.BACKEND_PORT }}
+      BACKEND_HOST: ${{ vars.BACKEND_HOST }}
+      FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
 
     steps:
-      - name: Show env variables
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Create .env file
         run: |
-          echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD"
-          echo "MYSQL_DATABASE: $MYSQL_DATABASE"
-          echo "MYSQL_USER: $MYSQL_USER"
-          echo "MYSQL_PASSWORD: $MYSQL_PASSWORD"
+          echo "MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD" >> .env
+          echo "MYSQL_USER=$MYSQL_USER" >> .env
+          echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env
+          echo "MYSQL_DATABASE=$MYSQL_DATABASE" >> .env
+          echo "BACKEND_PORT=$BACKEND_PORT" >> .env
+          echo "BACKEND_HOST=$BACKEND_HOST" >> .env
+          echo "FRONTEND_PORT=$FRONTEND_PORT" >> .env
+
+      - name: Deploy
+        run: docker compose up -d
