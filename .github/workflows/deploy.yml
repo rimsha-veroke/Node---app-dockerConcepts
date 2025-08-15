@@ -1,23 +1,23 @@
-name: Docker Compose Deployment
+name: Build and Push Docker
 
 on:
   push:
     branches:
       - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: project  # Make sure your secrets are in this environment
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Create .env file from secrets
+      - name: Create .env from secrets
         run: |
-     
-          echo "BACKEND_PORT=${{ vars.BACKEND_PORT }}" >> .env
+    
           echo "BACKEND_HOST=${{ vars.BACKEND_HOST }}" >> .env
-          echo "FRONTEND_PORT=${{ vars.FRONTEND_PORT }}" >> .env
+      
 
-      # 🚨 Debug only — REMOVE in production
-      - name: Show .env contents
+      - name: Show .env (testing only)
         run: cat .env
