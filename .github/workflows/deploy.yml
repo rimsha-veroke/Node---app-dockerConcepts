@@ -12,9 +12,9 @@ jobs:
       MYSQL_USER: ${{ secrets.MYSQL_USER }}
       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
       MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-      BACKEND_PORT: ${{ var.BACKEND_PORT }}
-      BACKEND_HOST: ${{ var.BACKEND_HOST }}
-      FRONTEND_PORT: ${{ var.FRONTEND_PORT }}
+      BACKEND_PORT: ${{ vars.BACKEND_PORT }}
+      BACKEND_HOST: ${{ vars.BACKEND_HOST }}
+      FRONTEND_PORT: ${{ vars.FRONTEND_PORT }}
 
     steps:
       - name: Checkout code
