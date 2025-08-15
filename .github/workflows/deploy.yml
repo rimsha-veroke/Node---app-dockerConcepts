@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production  # 👈 must match the environment name where your vars are set
+    environment: production  # Must match the environment where vars/secrets are stored
 
     steps:
       - name: Checkout code
