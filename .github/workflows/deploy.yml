@@ -1,27 +1,24 @@
-name: Deploy
-
-on:
-  push:
-    branches:
-      - main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    env:
+      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+      MYSQL_USER: ${{ secrets.MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
+      BACKEND_HOST: ${{ secrets.BACKEND_HOST }}
+      FRONTEND_PORT: ${{ secrets.FRONTEND_PORT }}
     steps:
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Debug secrets
         run: |
-          echo "MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}"
-          echo "MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}"
-          echo "MYSQL_USER: ${{ secrets.MYSQL_USER }}"
-          echo "MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}"
-
-      - name: Show MySQL logs if failure
-        if: failure()
-        run: |
-          echo "=== MySQL Logs ==="
-          docker logs mysql
+          echo "MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD"
+          echo "MYSQL_DATABASE: $MYSQL_DATABASE"
+          echo "MYSQL_USER: $MYSQL_USER"
+          echo "MYSQL_PASSWORD: $MYSQL_PASSWORD"
+          echo "BACKEND_PORT: $BACKEND_PORT"
+          echo "BACKEND_HOST: $BACKEND_HOST"
+          echo "FRONTEND_PORT: $FRONTEND_PORT"
