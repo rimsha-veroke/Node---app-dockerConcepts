@@ -1,4 +1,4 @@
-name: Deploy with Docker Compose
+name: Deploy
 
 on:
   push:
@@ -8,22 +8,17 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production  # Must match the environment where vars/secrets are stored
 
     steps:
-      - name: Checkout code
+      - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Build and start containers
+      - name: Debug secrets
         run: |
-          MYSQL_ROOT_PASSWORD="${{ secrets.MYSQL_ROOT_PASSWORD }}" \
-          MYSQL_USER="${{ secrets.MYSQL_USER }}" \
-          MYSQL_PASSWORD="${{ secrets.MYSQL_PASSWORD }}" \
-          MYSQL_DATABASE="${{ vars.MYSQL_DATABASE }}" \
-          BACKEND_PORT="${{ vars.BACKEND_PORT }}" \
-          BACKEND_HOST="${{ vars.BACKEND_HOST }}" \
-          FRONTEND_PORT="${{ vars.FRONTEND_PORT }}" \
-          docker compose up -d --build
+          echo "MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}"
+          echo "MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}"
+          echo "MYSQL_USER: ${{ secrets.MYSQL_USER }}"
+          echo "MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}"
 
       - name: Show MySQL logs if failure
         if: failure()
