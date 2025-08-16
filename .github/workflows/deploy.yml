@@ -1,3 +1,5 @@
+name: Deploy with Docker Compose
+
 on:
   push:
     branches:
@@ -6,17 +8,24 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: project
+    environment: project  # Fetches secrets & vars from the 'project' environment
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create .env file from secrets and vars
+      - name: Create .env file from environment secrets/vars
         run: |
+      
+          echo "MYSQL_DATABASE=${{ vars.MYSQL_DATABASE }}" >> .env
+          
           echo "BACKEND_PORT=${{ vars.BACKEND_PORT }}" >> .env
+          echo "BACKEND_HOST=${{ vars.BACKEND_HOST }}" >> .env
           echo "FRONTEND_PORT=${{ vars.FRONTEND_PORT }}" >> .env
 
-      - name: Debug .env (show keys only, hide values)
+      - name: Debug .env (keys only, no secrets)
         run: |
           echo "Environment variables loaded:"
           cat .env
+
+   
