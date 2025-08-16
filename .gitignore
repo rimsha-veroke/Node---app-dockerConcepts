@@ -1,0 +1,39 @@
+# Node.js dependencies
+node_modules/
+**/node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Environment variables
+.env
+.env.* 
+!.env.example   # Keep an example env file for contributors
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# Coverage / tests
+coverage/
+.jest/
+
+# Keys & credentials
+*.pem
+*.key
+*.crt
+*.pub
+id_rsa
+id_dsa
+*.secret

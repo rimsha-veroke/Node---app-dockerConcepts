@@ -1,0 +1,28 @@
+# Git files
+.git
+.gitignore
+
+# Node modules (reinstalled in Docker)
+node_modules
+**/node_modules
+
+# Logs
+*.log
+
+# Local env files (never bake secrets into images)
+.env
+.env.* 
+
+# Docker / Compose files
+Dockerfile*
+docker-compose*.yml
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+
+# Tests & coverage (not needed in prod image)
+coverage
+.jest
