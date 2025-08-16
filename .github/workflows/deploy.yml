@@ -8,21 +8,19 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: project  # Ensures GitHub fetches secrets from 'project' environment
+    environment: project  # Fetches secrets & vars from the 'project' environment
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create .env file from secrets
+      - name: Create .env file from environment secrets/vars
         run: |
-        
-          echo "BACKEND_PORT=${{ secrets.BACKEND_PORT }}" >> .env
+          echo "BACKEND_PORT=${{ vars.BACKEND_PORT }}" >> .env
       
-
-      - name: Debug .env (show keys only, hide values)
+      - name: Debug .env (keys only, no secrets)
         run: |
           echo "Environment variables loaded:"
           cut -d "=" -f1 .env
 
-   
+
