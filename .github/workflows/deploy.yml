@@ -60,4 +60,19 @@ jobs:
           echo "===== FRONTEND LOGS ====="
           docker logs --tail=100 frontend || true
           echo "===== MYSQL LOGS ====="
-          docker logs --tail=100 mysql || true
+          docker logs --tail=100 mysql || 
+                - name: Wait for containers to start
+        run: sleep 10
+
+      - name: Show container status
+        run: docker ps -a
+
+      - name: Show Backend Logs
+        run: docker logs backend || echo "No backend logs found"
+
+      - name: Show Frontend Logs
+        run: docker logs frontend || echo "No frontend logs found"
+
+      - name: Show MySQL Logs
+        run: docker logs mysql || echo "No mysql logs found"
+
