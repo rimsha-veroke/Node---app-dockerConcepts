@@ -16,11 +16,7 @@ jobs:
 
       - name: Create .env file from environment secrets/vars
         run: |
-          echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
-          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
-          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
           echo "MYSQL_DATABASE=${{ vars.MYSQL_DATABASE }}" >> .env
-          
           echo "BACKEND_PORT=${{ vars.BACKEND_PORT }}" >> .env
           echo "BACKEND_HOST=${{ vars.BACKEND_HOST }}" >> .env
           echo "FRONTEND_PORT=${{ vars.FRONTEND_PORT }}" >> .env
@@ -30,8 +26,4 @@ jobs:
           echo "Environment variables loaded:"
           cut -d "=" -f1 .env
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v3
-
-      - name: Deploy with Docker Compose
-        run: docker compose up -d
+      
