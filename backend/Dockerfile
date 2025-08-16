@@ -1,26 +1,29 @@
-# Stage 1: Build dependencies
-FROM node:20.19.4-trixie-slim AS builder
+# ---------- Stage 1: Builder ----------
+FROM node:20.19.0-slim AS builder
 
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Install dependencies
 COPY package*.json ./
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
-# Copy the rest of the app
+# Copy source
 COPY . .
 
-# Stage 2: Run the app
-FROM node:20.19.4-trixie-slim
+# ---------- Stage 2: Production ----------
+FROM gcr.io/distroless/nodejs20-debian12
 
+# Workdir inside container
 WORKDIR /app
-USER node
 
-# Copy node_modules from builder stage
-COPY --chown=node:node --from=builder /app/node_modules ./node_modules
-COPY --chown=node:node --from=builder /app ./
+# Copy app and dependencies from builder
+COPY --from=builder /app /app
 
-# Expose port
+# Drop root privileges automatically (distroless does this by default)
+USER nonroot
+
+# Expose app port
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Start the app
+CMD ["server.js"]
