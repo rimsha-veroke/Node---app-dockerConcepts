@@ -62,7 +62,7 @@ jobs:
           docker logs --tail=100 frontend || true
           echo "===== MYSQL LOGS ====="
           docker logs --tail=100 mysql || 
-                - name: Wait for containers to start
+      - name: Wait for containers to start
         run: sleep 10
 
       - name: Show container status
