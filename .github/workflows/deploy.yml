@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: Node<-project  # Fetches secrets & vars from the 'project' environment
+    environment: project  # Fetches secrets & vars from the 'project' environment
 
     steps:
       - name: Checkout code
