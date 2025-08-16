@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   mysql:
     image: mysql:8
@@ -17,6 +19,11 @@ services:
       retries: 5
     volumes:
       - mysql_data:/var/lib/mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   backend:
     build:
@@ -36,6 +43,11 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   frontend:
     build:
@@ -46,8 +58,15 @@ services:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     environment:
       FRONTEND_PORT: ${FRONTEND_PORT}
+      BACKEND_HOST: backend
+      BACKEND_PORT: ${BACKEND_PORT}
     depends_on:
       - backend
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   mysql_data:
