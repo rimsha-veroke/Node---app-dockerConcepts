@@ -24,16 +24,14 @@ jobs:
           echo "BACKEND_PORT=${{ vars.BACKEND_PORT }}" >> .env
           echo "BACKEND_HOST=${{ vars.BACKEND_HOST }}" >> .env
           echo "FRONTEND_PORT=${{ vars.FRONTEND_PORT }}" >> .env
-          
           echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" >> .env
           echo "DOCKER_TAG=${{ vars.DOCKER_TAG }}" >> .env
           echo "IMAGE_NAME=${{ vars.IMAGE_NAME }}" >> .env
 
       - name: Debug .env (keys only, no secrets)
         run: |
-          echo "===== Environment variables loaded ====="
-          cat .env | sed 's/=.*/=<hidden>/'   # hide values for security
-          echo "======================================="
+          echo "Environment variables loaded:"
+          cat .env
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -46,20 +44,23 @@ jobs:
 
       - name: Build & Push Docker Images
         run: |
-          echo "===== Building Backend Image ====="
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMAGE_NAME }}:${{ vars.DOCKER_TAG }} ./backend
-          
-          echo "===== Building Frontend Image ====="
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMAGE_NAME }}-frontend:${{ vars.DOCKER_TAG }} ./frontend
           
-          echo "===== Pushing Backend Image ====="
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMAGE_NAME }}:${{ vars.DOCKER_TAG }}
-          
-          echo "===== Pushing Frontend Image ====="
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMAGE_NAME }}-frontend:${{ vars.DOCKER_TAG }}
 
       - name: Deploy with Docker Compose
-        run: |
-          echo "===== Starting Docker Compose Deploy ====="
-          docker compose up -d
-          echo "===== Deployment Finished ====="
+        run: docker compose up -d --build
+
+      - name: Show Running Containers
+        run: docker ps -a
+
+      - name: Show Backend Logs
+        run: docker logs backend || true
+
+      - name: Show Frontend Logs
+        run: docker logs frontend || true
+
+      - name: Show MySQL Logs
+        run: docker logs mysql || true
