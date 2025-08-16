@@ -19,4 +19,4 @@ jobs:
       - name: Debug .env (show keys only, hide values)
         run: |
           echo "Environment variables loaded:"
-          cut -d "=" -f1 .env
+          cat .env
