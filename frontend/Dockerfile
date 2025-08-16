@@ -1,5 +1,5 @@
 # ---------- Stage 1: Build ----------
-FROM node:20-slim AS builder
+FROM node:20.19.4-trixie-slim
 
 WORKDIR /app
 

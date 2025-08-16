@@ -51,6 +51,7 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMAGE_NAME }}-frontend:${{ vars.DOCKER_TAG }}
 
       - name: Deploy with Docker Compose
+        run: docker-compose build --no-cache
         run: docker compose up -d --build
 
       - name: Show container logs
