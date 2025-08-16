@@ -1,28 +1,26 @@
-# ---------- Stage 1: Build ----------
-FROM node:20-slim AS builder
-
-# Install security updates + clean apt cache
-RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+# Stage 1: Build dependencies
+FROM node:20.19.4-trixie-slim AS builder
 
 WORKDIR /app
+
+# Copy package files and install dependencies
 COPY package*.json ./
-RUN npm ci
+RUN npm install --omit=dev
+
+# Copy the rest of the app
 COPY . .
 
-# ---------- Stage 2: Production ----------
-FROM node:20-slim
+# Stage 2: Run the app
+FROM node:20.19.4-trixie-slim
 
-# Apply latest security patches
-RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
-
-ENV NODE_ENV=production
-
+WORKDIR /app
 USER node
-WORKDIR /home/node/app
 
-COPY --chown=node:node package*.json ./
+# Copy node_modules from builder stage
 COPY --chown=node:node --from=builder /app/node_modules ./node_modules
 COPY --chown=node:node --from=builder /app ./
 
+# Expose port
 EXPOSE 3000
+
 CMD ["npm", "start"]

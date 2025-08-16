@@ -1,12 +1,11 @@
 # ---------- Stage 1: Build ----------
-FROM node:20.19.4-trixie-slim
+FROM node:20.19.4-trixie-slim AS builder
 
 WORKDIR /app
 
 # Copy package files and install dependencies (including dev for build)
 COPY package*.json ./
 RUN npm install
-
 
 # Copy the rest of the app
 COPY . .
@@ -23,7 +22,7 @@ USER node
 # Set working directory inside node's home
 WORKDIR /home/node/app
 
-# Copy only what’s needed for runtime
+# Copy only what’s needed for runtime from builder stage
 COPY --chown=node:node package*.json ./
 COPY --chown=node:node --from=builder /app/node_modules ./node_modules
 COPY --chown=node:node --from=builder /app ./
