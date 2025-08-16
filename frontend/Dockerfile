@@ -7,14 +7,17 @@ WORKDIR /app
 # Copy package.json and lock file first for better caching
 COPY package*.json ./
 
-# Install only production dependencies
-RUN npm ci --omit=dev
+# Install all dependencies (dev + prod)
+RUN npm ci
 
 # Copy application source code
 COPY . .
 
 # Build the app (if you have a build step, e.g. React/TypeScript)
 RUN npm run build || echo "no build step"
+
+# Remove devDependencies to shrink final image
+RUN npm prune --omit=dev
 
 # ---------- Runtime Stage ----------
 # Use distroless Node.js for minimal & secure runtime
@@ -25,9 +28,6 @@ WORKDIR /app
 
 # Copy only necessary files from build stage
 COPY --from=build /app ./
-
-# Run as non-root (already enforced by distroless:nonroot)
-USER nonroot
 
 # Expose app port
 EXPOSE 3000
