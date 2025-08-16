@@ -50,7 +50,7 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMAGE_NAME }}:${{ vars.DOCKER_TAG }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMAGE_NAME }}-frontend:${{ vars.DOCKER_TAG }}
       - name: clear chache
-        run: docker-compose build --no-cache
+        run: docker compose build --no-cache
       - name: Deploy with Docker Compose
         run: docker compose up -d --build
 
